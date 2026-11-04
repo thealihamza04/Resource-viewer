@@ -2,6 +2,7 @@
   "name": "resource-viewer",
   "productName": "Resource Viewer",
   "version": "0.1.0",
+  "license": "MIT",
   "description": "See what slows your PC down, and clean it with a clear view of what you lose.",
   "main": "./out/main/index.js",
   "type": "module",

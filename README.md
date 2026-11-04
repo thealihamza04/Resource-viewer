@@ -6,7 +6,7 @@
 
 **See what slows your computer down — and clean it with a clear view of what you give up.**
 
-Windows · Linux · macOS
+Windows · Linux · macOS · [MIT License](LICENSE)
 
 </div>
 
@@ -234,6 +234,10 @@ macOS protects the Trash. Give Resource Viewer **Full Disk Access** in
 **System Settings → Privacy & Security**.
 
 </details>
+
+## License
+
+Released under the [MIT License](LICENSE).
 
 ---
 
