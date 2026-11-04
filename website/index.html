@@ -345,7 +345,7 @@ img { max-width: 100%; height: auto; display: block; }
     <h1 id="hero-title">The cleaner that shows what you lose.</h1>
     <p class="lede">A free system monitor and cache cleaner for Windows, Linux and macOS.</p>
     <div class="actions">
-      <a class="btn" id="dl-primary" href="https://github.com/thealihamza04/Resource-viewer/releases/latest">
+      <a class="btn" id="dl-primary" href="#download">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg>
         <span id="dl-label">Download free</span>
       </a>
@@ -435,10 +435,10 @@ img { max-width: 100%; height: auto; display: block; }
       <table class="table">
         <thead><tr><th scope="col">Platform</th><th scope="col">File</th><th scope="col"><span class="visually-hidden">Link</span></th></tr></thead>
         <tbody>
-          <tr><th scope="row">Windows 10 and 11</th><td>Installer, <code>ResourceViewer-Setup.exe</code></td><td><a href="https://github.com/thealihamza04/Resource-viewer/releases/latest">Download</a></td></tr>
-          <tr><th scope="row">Windows, no install</th><td>Portable, <code>ResourceViewer-Portable.exe</code></td><td><a href="https://github.com/thealihamza04/Resource-viewer/releases/latest">Download</a></td></tr>
-          <tr><th scope="row">Ubuntu and Debian</th><td><code>resource-viewer_amd64.deb</code></td><td><a href="https://github.com/thealihamza04/Resource-viewer/releases/latest">Download</a></td></tr>
-          <tr><th scope="row">Other Linux</th><td><code>ResourceViewer.AppImage</code></td><td><a href="https://github.com/thealihamza04/Resource-viewer/releases/latest">Download</a></td></tr>
+          <tr><th scope="row">Windows 10 and 11</th><td>Installer, <code>ResourceViewer-Setup.exe</code></td><td><a href="https://github.com/thealihamza04/Resource-viewer/releases/latest/download/ResourceViewer-Setup.exe">Download</a></td></tr>
+          <tr><th scope="row">Windows, no install</th><td>Portable, <code>ResourceViewer-Portable.exe</code></td><td><a href="https://github.com/thealihamza04/Resource-viewer/releases/latest/download/ResourceViewer-Portable.exe">Download</a></td></tr>
+          <tr><th scope="row">Ubuntu and Debian</th><td><code>resource-viewer_amd64.deb</code></td><td><a href="https://github.com/thealihamza04/Resource-viewer/releases/latest/download/resource-viewer_amd64.deb">Download</a></td></tr>
+          <tr><th scope="row">Other Linux</th><td><code>ResourceViewer.AppImage</code></td><td><a href="https://github.com/thealihamza04/Resource-viewer/releases/latest/download/ResourceViewer.AppImage">Download</a></td></tr>
           <tr><th scope="row">macOS</th><td>Build on a Mac with <code>npm run dist:mac</code></td><td><a href="https://github.com/thealihamza04/Resource-viewer#building-for-macos">How to</a></td></tr>
         </tbody>
       </table>
@@ -480,9 +480,11 @@ img { max-width: 100%; height: auto; display: block; }
 <script>
   // Name the visitor's platform on the main download button. Without scripting it reads "Download free".
   (function () {
-    var ua = navigator.userAgent, label = document.getElementById('dl-label');
-    if (/Windows/i.test(ua)) label.textContent = 'Download for Windows';
-    else if (/Linux|X11/i.test(ua) && !/Android/i.test(ua)) label.textContent = 'Download for Linux';
+    var ua = navigator.userAgent, label = document.getElementById('dl-label'), btn = document.getElementById('dl-primary');
+    var base = 'https://github.com/thealihamza04/Resource-viewer/releases/latest/download/';
+    if (/Windows/i.test(ua)) { label.textContent = 'Download for Windows'; btn.href = base + 'ResourceViewer-Setup.exe'; }
+    else if (/Linux|X11/i.test(ua) && !/Android/i.test(ua)) { label.textContent = 'Download for Linux'; btn.href = base + 'resource-viewer_amd64.deb'; }
+    else { btn.href = '#download'; }
   })();
 </script>
 </body>

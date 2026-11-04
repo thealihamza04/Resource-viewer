@@ -62,10 +62,10 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "Resource Viewer",
-      "artifactName": "ResourceViewer-Setup-${version}.${ext}"
+      "artifactName": "ResourceViewer-Setup.${ext}"
     },
     "portable": {
-      "artifactName": "ResourceViewer-Portable-${version}.${ext}"
+      "artifactName": "ResourceViewer-Portable.${ext}"
     },
     "linux": {
       "target": [
@@ -103,10 +103,10 @@
       "category": "public.app-category.utilities"
     },
     "deb": {
-      "artifactName": "resource-viewer_${version}_amd64.${ext}"
+      "artifactName": "resource-viewer_amd64.${ext}"
     },
     "appImage": {
-      "artifactName": "ResourceViewer-${version}.${ext}"
+      "artifactName": "ResourceViewer.${ext}"
     }
   },
   "dependencies": {

@@ -83,14 +83,14 @@ The full catalogue for each platform lives in [`src/main/targets.ts`](src/main/t
 
 ## Download & install
 
-Download the file for your platform from the `dist/` folder (or your release page).
+Download the file for your platform from the [latest release](https://github.com/thealihamza04/Resource-viewer/releases/latest).
 
 | Platform | File | Install |
 |---|---|---|
-| **Windows 10 / 11** | `ResourceViewer-Setup-<version>.exe` | Run the installer. Adds Start-menu and desktop shortcuts; uninstall from **Settings → Apps**. |
-| | `ResourceViewer-Portable-<version>.exe` | No installation — double-click to run. |
-| **Ubuntu / Debian** | `resource-viewer_<version>_amd64.deb` | `sudo apt install ./resource-viewer_<version>_amd64.deb`, then open **Resource Viewer** from the app menu. |
-| **Other Linux** | `ResourceViewer-<version>.AppImage` | `chmod +x ResourceViewer-*.AppImage` and run it. |
+| **Windows 10 / 11** | `ResourceViewer-Setup.exe` | Run the installer. Adds Start-menu and desktop shortcuts; uninstall from **Settings → Apps**. |
+| | `ResourceViewer-Portable.exe` | No installation — double-click to run. |
+| **Ubuntu / Debian** | `resource-viewer_amd64.deb` | `sudo apt install ./resource-viewer_amd64.deb`, then open **Resource Viewer** from the app menu. |
+| **Other Linux** | `ResourceViewer.AppImage` | `chmod +x ResourceViewer.AppImage` and run it. |
 | **macOS** | `Resource Viewer-<version>.dmg` | Open the disk image and drag the app to **Applications**. Must be built on a Mac — see below. |
 
 > [!NOTE]
