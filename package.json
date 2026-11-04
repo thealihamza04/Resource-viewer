@@ -1,0 +1,145 @@
+{
+  "name": "resource-viewer",
+  "productName": "Resource Viewer",
+  "version": "0.1.0",
+  "description": "See what slows your PC down, and clean it with a clear view of what you lose.",
+  "main": "./out/main/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "dev:nosandbox": "electron-vite dev -- --no-sandbox",
+    "build": "electron-vite build",
+    "start": "electron-vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
+    "dist": "electron-vite build && electron-builder",
+    "dist:win": "bash scripts/dist-win.sh",
+    "dist:win:native": "electron-vite build && electron-builder --win --x64",
+    "dist:linux": "electron-vite build && electron-builder --linux",
+    "dist:mac": "electron-vite build && electron-builder --mac --x64 --arm64",
+    "icons": "python3 scripts/make-icons.py"
+  },
+  "build": {
+    "appId": "com.resourceviewer.app",
+    "productName": "Resource Viewer",
+    "copyright": "Copyright © 2026 Ali Hamza",
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
+    "files": [
+      "out/**/*",
+      "resources/**",
+      "package.json"
+    ],
+    "asar": true,
+    "asarUnpack": [
+      "out/main/chunks/**",
+      "resources/**"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "executableName": "ResourceViewer"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Resource Viewer",
+      "artifactName": "ResourceViewer-Setup-${version}.${ext}"
+    },
+    "portable": {
+      "artifactName": "ResourceViewer-Portable-${version}.${ext}"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Utility",
+      "icon": "build/icons",
+      "executableName": "resource-viewer",
+      "synopsis": "See what slows your PC down and clean it safely",
+      "desktop": {
+        "entry": {
+          "Name": "Resource Viewer",
+          "StartupWMClass": "Resource Viewer",
+          "Keywords": "system;monitor;cpu;memory;cleaner;cache;"
+        }
+      }
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "icon": "build/icon.icns",
+      "category": "public.app-category.utilities"
+    },
+    "deb": {
+      "artifactName": "resource-viewer_${version}_amd64.${ext}"
+    },
+    "appImage": {
+      "artifactName": "ResourceViewer-${version}.${ext}"
+    }
+  },
+  "dependencies": {
+    "systeminformation": "^5.33.19"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.4",
+    "@types/d3-scale": "^4.0.9",
+    "@types/d3-shape": "^3.2.0",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.2.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "d3-scale": "^4.0.3",
+    "d3-shape": "^3.2.1",
+    "electron": "^45.2.2",
+    "electron-builder": "^26.18.0",
+    "electron-vite": "^6.0.0",
+    "lucide-react": "^1.68.0",
+    "radix-ui": "^1.8.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "recharts": "^3.8.0",
+    "sonner": "^2.0.8",
+    "tailwind-merge": "^3.7.0",
+    "tailwindcss": "^4.3.4",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.5"
+  },
+  "author": {
+    "name": "Ali Hamza",
+    "email": "bidzest@gmail.com"
+  },
+  "homepage": "mailto:bidzest@gmail.com"
+}

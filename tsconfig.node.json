@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2023"],
+    "types": ["node"],
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "composite": true,
+    "noEmit": true
+  },
+  "include": ["electron.vite.config.ts", "node_modules/electron-vite/node.d.ts", "src/main/**/*", "src/preload/**/*", "src/shared/**/*"]
+}
