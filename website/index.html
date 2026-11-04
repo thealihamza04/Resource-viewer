@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resource Viewer | Free PC Cleaner and System Monitor for Windows and Linux</title>
+<meta name="description" content="Free, open-source PC cleaner and system monitor for Windows, Linux and macOS. Clear browser, app and temp caches, and see exactly what you gain and lose before anything is deleted.">
+<link rel="canonical" href="https://resource-viewer.vercel.app/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Ali Hamza">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Resource Viewer">
+<meta property="og:title" content="Resource Viewer: the PC cleaner that shows what you lose">
+<meta property="og:description" content="Free system monitor and cache cleaner for Windows, Linux and macOS. Every item explains what you gain and what you give up.">
+<meta property="og:url" content="https://resource-viewer.vercel.app/">
+<meta property="og:image" content="https://resource-viewer.vercel.app/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Resource Viewer cleanup screen listing caches with their risk level">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Resource Viewer: the PC cleaner that shows what you lose">
+<meta name="twitter:description" content="Free system monitor and cache cleaner for Windows, Linux and macOS.">
+<meta name="twitter:image" content="https://resource-viewer.vercel.app/assets/og-image.png">
+
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icon-32.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preload" as="image" type="image/webp" href="/assets/overview-light.webp" media="(prefers-color-scheme: light)" fetchpriority="high">
+<link rel="preload" as="image" type="image/webp" href="/assets/overview-dark.webp" media="(prefers-color-scheme: dark)" fetchpriority="high">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://resource-viewer.vercel.app/#app",
+      "name": "Resource Viewer",
+      "description": "Free, open-source system monitor and cache cleaner. Every cleanup item explains what it is, what you gain and what you might lose, with a clear risk level.",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Windows 10, Windows 11, Ubuntu, Debian, Linux, macOS",
+      "softwareVersion": "0.1.0",
+      "license": "https://opensource.org/licenses/MIT",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "downloadUrl": "https://github.com/thealihamza04/Resource-viewer/releases/latest",
+      "codeRepository": "https://github.com/thealihamza04/Resource-viewer",
+      "url": "https://resource-viewer.vercel.app/",
+      "image": "https://resource-viewer.vercel.app/assets/icon-512.png",
+      "screenshot": [
+        "https://resource-viewer.vercel.app/assets/overview-light.webp",
+        "https://resource-viewer.vercel.app/assets/cleanup.webp",
+        "https://resource-viewer.vercel.app/assets/processes.webp"
+      ],
+      "featureList": [
+        "Live CPU, memory and per-thread graphs",
+        "Browser, app, developer and temp cache cleanup",
+        "Risk level and what you lose for every item",
+        "Apps grouped by memory and CPU use",
+        "Strict allow-list: nothing outside known cache folders is touched"
+      ],
+      "author": { "@type": "Person", "name": "Ali Hamza", "url": "https://github.com/thealihamza04" }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://resource-viewer.vercel.app/#site",
+      "url": "https://resource-viewer.vercel.app/",
+      "name": "Resource Viewer",
+      "inLanguage": "en"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is Resource Viewer free?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. It is free and open source under the MIT license, with no ads, accounts or upgrades." }
+        },
+        {
+          "@type": "Question",
+          "name": "Will cleaning delete my passwords, cookies or browser history?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. Browser cleanup only removes the cache. Cookies, saved passwords, history and bookmarks are never touched." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does Windows say \"Windows protected your PC\"?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The app is not code-signed yet. Choose More info, then Run anyway. The full source code is public on GitHub." }
+        },
+        {
+          "@type": "Question",
+          "name": "Should I clear my RAM cache to speed up my PC?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. File cache is spare memory your system uses to open files faster, and it is handed to apps the moment they need it. Resource Viewer shows it separately so you can see real memory pressure." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it need administrator rights?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. It cleans files that belong to you. Items that need admin rights, such as system logs and package caches, are measured and shown with the exact command to run yourself." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<style>
+/* Hallmark · shape: product keynote, one screen at a time, the app's own system · genre: modern-minimal · theme: custom · job: try · idea: "a cleaner page that, like the app, shows the cost beside the gain" · vibe: "Apple-quiet, honest, native, airy, exact"
+ * paper: #f5f5f7 (the app's own canvas) · accent: #0071e3 (the app's system blue) · display: system UI (SF Pro, Segoe UI Variable) · body: system UI · hero: centred head and download over the live Overview screenshot that follows the visitor's light or dark setting · nav: frosted sticky bar, wordmark left, three anchors and a download pill right · footer: one row, wordmark and licence left, links right · imagery: the product, captured screenshots · signature: the hero screenshot swapping light and dark with the visitor's system, as the app does
+ * axes: light/grotesk-sans/cool · posture: centred keynote · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H5 E4 S4 R5 V3 · weakest: V, the user asked for the app's Apple look, so the page borrows the app's system instead of a dealt theme; specificity comes from the gain and loss table and the safety rules, which no other cleaner can claim */
+/* Hallmark · waive 1 · system UI display, SF Pro Display on Mac and Segoe UI Variable Display on Windows · the user asked for an Apple-like page that matches the app, which ships this native stack */
+/* Hallmark · waive 6b · head, lede, download and screenshot share one centred axis · the user asked for an Apple product-page keynote and the screenshot carries the mass */
+/* Hallmark · dismissed 29 · the frosted nav is the app's own title bar material, a blur over the page, no glow or orb */
+/* Hallmark · dismissed 41 · the download card inherits ink, which is light on the dark card in dark mode */
+/* Hallmark · waive 42 · frosted bar with wordmark, anchors and a download pill · matches the app's own frosted title bar the user approved */
+
+:root {
+  --space-3xs: 2px; --space-2xs: 4px; --space-xs: 8px; --space-sm: 12px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px; --space-2xl: 64px; --space-3xl: 96px; --space-4xl: 144px;
+  --text-xs: 0.8125rem; --text-sm: 0.875rem; --text-md: 1.0625rem; --text-lg: 1.25rem; --text-xl: 1.5rem;
+  --text-display: clamp(2.6rem, 4.6vw + 0.6rem, 4.75rem);
+  --text-section: clamp(2.1rem, 2.6vw + 1rem, 3.5rem);
+  --text-title: clamp(1.2rem, 0.6vw + 0.95rem, 1.5rem);
+  --text-lead: clamp(1.15rem, 0.5vw + 1rem, 1.5rem);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-micro: 120ms; --dur-short: 220ms;
+  --container: 1200px; --gutter: 64px; --gap-columns: 32px; --section-gap: 160px; --section-gap-s: 120px;
+  --nav-h: 56px;
+  --z-sticky-nav: 300;
+
+  --color-paper: #f5f5f7;
+  --color-paper-2: #ffffff;
+  --color-paper-3: #e8e8ed;
+  --color-ink: #1d1d1f;
+  --color-ink-2: #3a3a3c;
+  --color-muted: #6e6e73;
+  --color-rule: rgb(29 29 31 / 0.1);
+  --color-accent: #0071e3;
+  --color-accent-2: #0062c4;
+  --color-accent-ink: #ffffff;
+  --color-focus: #0071e3;
+  --color-safe: #248a3d;
+  --color-minor: #b25f00;
+  --color-think: #d70015;
+  --color-nav: rgb(245 245 247 / 0.78);
+  --color-band: #1d1d1f;
+  --color-band-ink: #f5f5f7;
+  --color-band-muted: #a1a1a6;
+  --color-band-rule: rgb(245 245 247 / 0.14);
+  --color-shadow: rgb(29 29 31 / 0.14);
+
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI Variable Display", "Segoe UI", Ubuntu, Cantarell, system-ui, sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable Text", "Segoe UI", Ubuntu, Cantarell, system-ui, sans-serif;
+
+  --radius-shot: 18px; --radius-card: 22px; --radius-pill: 999px;
+  --shadow-shot: 0 2px 6px var(--color-shadow), 0 24px 64px var(--color-shadow);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-paper: #050506;
+    --color-paper-2: #1c1c1e;
+    --color-paper-3: #2c2c2e;
+    --color-ink: #f5f5f7;
+    --color-ink-2: #d2d2d7;
+    --color-muted: #a1a1a6;
+    --color-rule: rgb(245 245 247 / 0.14);
+    --color-accent: #2997ff;
+    --color-accent-2: #4aa8ff;
+    --color-accent-ink: #050506;
+    --color-focus: #2997ff;
+    --color-safe: #30d158;
+    --color-minor: #ff9f0a;
+    --color-think: #ff453a;
+    --color-nav: rgb(22 22 23 / 0.72);
+    --color-band: #1c1c1e;
+    --color-band-ink: #f5f5f7;
+    --color-band-muted: #a1a1a6;
+    --color-band-rule: rgb(245 245 247 / 0.12);
+    --color-shadow: rgb(0 0 0 / 0.5);
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { overflow-x: clip; }
+html { scrollbar-color: var(--color-muted) var(--color-paper); scroll-padding-top: calc(var(--nav-h) + var(--space-md)); scroll-behavior: smooth; }
+body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-family: var(--font-body); font-size: var(--text-md); line-height: 1.55; letter-spacing: -0.01em; -webkit-font-smoothing: antialiased; }
+::selection { background: color-mix(in oklab, var(--color-accent) 24%, transparent); }
+:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+a { color: inherit; text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+h1, h2, h3 { margin: 0; font-family: var(--font-display); font-weight: 600; letter-spacing: -0.025em; overflow-wrap: break-word; min-width: 0; text-wrap: balance; }
+p { margin: 0; text-wrap: pretty; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+img { max-width: 100%; height: auto; display: block; }
+.container { width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.skip { position: absolute; left: var(--space-md); top: calc(-1 * var(--space-3xl)); z-index: 400; padding: var(--space-xs) var(--space-md); border-radius: var(--radius-pill); background: var(--color-ink); color: var(--color-paper); }
+.skip:focus-visible { top: var(--space-xs); }
+
+/* Nav */
+.nav { position: sticky; top: 0; z-index: var(--z-sticky-nav); background: var(--color-nav); -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid var(--color-rule); }
+.nav .container { display: flex; align-items: center; gap: var(--space-lg); height: var(--nav-h); }
+.brand { display: inline-flex; align-items: center; gap: var(--space-xs); font-weight: 600; text-decoration: none; letter-spacing: -0.02em; }
+.brand img { width: 26px; height: 26px; }
+.nav ul { display: flex; gap: var(--space-lg); margin-left: auto; font-size: var(--text-sm); }
+.nav ul a:not(.btn) { color: var(--color-muted); text-decoration: none; transition: color var(--dur-short) var(--ease-out); }
+.nav ul a:not(.btn):hover { color: var(--color-ink); }
+
+/* Buttons: one filled primary, one quiet */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-xs); min-height: 48px; padding: 0 var(--space-lg); border: 1px solid transparent; border-radius: var(--radius-pill); background: var(--color-accent); color: var(--color-accent-ink); font: 500 var(--text-md)/1 var(--font-body); white-space: nowrap; text-decoration: none; cursor: pointer; transition: background-color var(--dur-short) var(--ease-out), transform var(--dur-micro) var(--ease-out); }
+.btn:hover { background: var(--color-accent-2); }
+.btn:active { transform: scale(0.98); }
+.btn--small { min-height: 32px; padding: 0 var(--space-md); font-size: var(--text-sm); }
+.btn--quiet { background: transparent; color: var(--color-accent); border-color: transparent; }
+.btn--quiet:hover { background: color-mix(in oklab, var(--color-accent) 10%, transparent); }
+.btn svg { width: 18px; height: 18px; flex: none; }
+
+/* Hero */
+.hero { padding-top: var(--space-3xl); text-align: center; }
+.hero h1 { font-size: var(--text-display); line-height: 1.04; letter-spacing: -0.035em; max-width: 18ch; margin-inline: auto; }
+.hero .lede { margin: var(--space-md) auto 0; max-width: 34ch; font-size: var(--text-lead); color: var(--color-muted); line-height: 1.4; }
+.actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-sm); margin-top: var(--space-xl); }
+.hero .fine { margin-top: var(--space-md); font-size: var(--text-sm); color: var(--color-muted); }
+.shot { margin: 0; border-radius: var(--radius-shot); overflow: hidden; box-shadow: var(--shadow-shot); background: var(--color-paper-2); }
+.shot img { width: 100%; }
+.hero .shot { margin-top: var(--space-2xl); }
+
+/* Sections */
+.section { padding-top: var(--section-gap); }
+.head { max-width: 760px; }
+.head h2 { font-size: var(--text-section); line-height: 1.06; }
+.head p { margin-top: var(--space-md); font-size: var(--text-lead); color: var(--color-muted); line-height: 1.45; max-width: 46ch; }
+.center { text-align: center; margin-inline: auto; }
+.center p { margin-inline: auto; }
+
+/* Cleanup: screenshot beside the risk ladder */
+.split { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: var(--space-2xl); align-items: center; margin-top: var(--space-2xl); }
+.risks { display: grid; gap: var(--space-xl); }
+.risks li { display: grid; justify-items: start; gap: var(--space-xs); }
+.risks .meaning { font-size: var(--text-title); font-weight: 600; letter-spacing: -0.02em; line-height: 1.3; }
+.risks .tag { padding: var(--space-2xs) var(--space-sm); border-radius: var(--radius-pill); background: color-mix(in oklab, var(--risk) 14%, transparent); color: var(--risk); font-size: var(--text-sm); font-weight: 600; letter-spacing: 0; }
+.risks .def { font-size: var(--text-sm); color: var(--color-ink-2); }
+.r-safe { --risk: var(--color-safe); }
+.r-minor { --risk: var(--color-minor); }
+.r-think { --risk: var(--color-think); }
+
+/* Monitor: wide screenshot with four facts under it */
+.facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gap-columns); margin-top: var(--space-xl); }
+.facts h3 { font-size: var(--text-lg); letter-spacing: -0.02em; }
+.facts p { margin-top: var(--space-2xs); color: var(--color-muted); font-size: var(--text-sm); line-height: 1.5; }
+.monitor .shot { margin-top: var(--space-2xl); }
+
+/* Safety: a change of paper */
+.band { margin-top: var(--section-gap); padding-block: var(--section-gap-s); background: var(--color-band); color: var(--color-band-ink); }
+.band .head p { color: var(--color-band-muted); }
+.rules { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-xl) var(--space-2xl); margin-top: var(--space-2xl); counter-reset: rule; }
+.rules li { counter-increment: rule; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-md); padding-top: var(--space-lg); border-top: 1px solid var(--color-band-rule); font-size: var(--text-lg); line-height: 1.4; letter-spacing: -0.015em; }
+.rules li::before { content: counter(rule); color: var(--color-band-muted); font-variant-numeric: tabular-nums; }
+.rules span { display: block; margin-top: var(--space-2xs); font-size: var(--text-sm); color: var(--color-band-muted); letter-spacing: -0.005em; }
+
+/* Tables */
+.table { width: 100%; margin-top: var(--space-2xl); border-collapse: collapse; font-size: var(--text-md); }
+.table th, .table td { padding: var(--space-md) var(--space-md) var(--space-md) 0; border-bottom: 1px solid var(--color-rule); text-align: left; vertical-align: top; }
+.table thead th { font-size: var(--text-sm); font-weight: 500; color: var(--color-muted); }
+.table tbody th { font-weight: 600; white-space: nowrap; width: 26%; }
+.table td { color: var(--color-ink-2); }
+.table code { font-size: 0.92em; padding: var(--space-3xs) var(--space-xs); border-radius: var(--space-xs); background: var(--color-paper-3); color: var(--color-ink); }
+.table a { color: var(--color-accent); font-weight: 500; text-decoration: none; }
+.table a:hover { text-decoration: underline; }
+
+/* Download */
+.download .card { margin-top: var(--space-2xl); padding: var(--space-xl); border-radius: var(--radius-card); background: var(--color-paper-2); }
+.download .card .table { margin-top: 0; }
+.download .card .table tr:last-child > * { border-bottom: 0; }
+.note { margin-top: var(--space-lg); font-size: var(--text-sm); color: var(--color-muted); max-width: 70ch; }
+
+/* FAQ */
+.faq { margin-top: var(--space-2xl); border-top: 1px solid var(--color-rule); }
+.faq details { border-bottom: 1px solid var(--color-rule); }
+.faq summary { display: flex; justify-content: space-between; align-items: center; gap: var(--space-md); padding: var(--space-lg) 0; font-size: var(--text-title); font-weight: 600; letter-spacing: -0.02em; cursor: pointer; list-style: none; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; font-weight: 400; color: var(--color-muted); transition: transform var(--dur-short) var(--ease-out); }
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq summary:focus-visible { outline-offset: -2px; }
+.faq details p { padding-bottom: var(--space-lg); color: var(--color-muted); max-width: 65ch; }
+
+/* Final call */
+.final { padding-block: var(--section-gap) var(--space-3xl); text-align: center; }
+.final-title { font-size: var(--text-section); line-height: 1.06; }
+.final img.icon { width: 96px; height: 96px; margin: 0 auto var(--space-lg); }
+
+/* Footer */
+.foot { border-top: 1px solid var(--color-rule); padding-block: var(--space-xl); font-size: var(--text-sm); color: var(--color-muted); }
+.foot .container { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-md); }
+.foot ul { display: flex; flex-wrap: wrap; gap: var(--space-lg); }
+.foot a { text-decoration: none; }
+.foot a:hover { color: var(--color-ink); }
+
+@media (max-width: 60rem) {
+  :root { --gutter: 24px; --section-gap: 112px; --section-gap-s: 88px; }
+  .split { grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); }
+  .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rules { grid-template-columns: minmax(0, 1fr); }
+  .nav ul li:not(:last-child) { display: none; }
+}
+@media (max-width: 40rem) {
+  :root { --gutter: 16px; --section-gap: 88px; --section-gap-s: 72px; }
+  .hero { padding-top: var(--space-2xl); }
+  .facts { grid-template-columns: minmax(0, 1fr); }
+  .download .card { padding: var(--space-md); }
+  .table tbody th { white-space: normal; }
+  .table thead { display: none; }
+  .table tr { display: grid; padding-block: var(--space-sm); border-bottom: 1px solid var(--color-rule); }
+  .table th, .table td { padding: var(--space-2xs) 0; border: 0; width: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .btn, .nav ul a, .faq summary::after { transition: none; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav">
+  <nav class="container" aria-label="Main">
+    <a class="brand" href="/" aria-label="Resource Viewer home">
+      <img src="/assets/icon-192.png" alt="" width="26" height="26">
+      Resource Viewer
+    </a>
+    <ul>
+      <li><a href="#cleanup">Cleanup</a></li>
+      <li><a href="#monitor">Monitor</a></li>
+      <li><a href="#safety">Safety</a></li>
+      <li><a class="btn btn--small" href="#download">Download</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+  <section class="hero container" aria-labelledby="hero-title">
+    <h1 id="hero-title">The cleaner that shows what you lose.</h1>
+    <p class="lede">A free system monitor and cache cleaner for Windows, Linux and macOS.</p>
+    <div class="actions">
+      <a class="btn" id="dl-primary" href="https://github.com/thealihamza04/Resource-viewer/releases/latest">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg>
+        <span id="dl-label">Download free</span>
+      </a>
+      <a class="btn btn--quiet" href="https://github.com/thealihamza04/Resource-viewer">View the source</a>
+    </div>
+    <p class="fine">Open source under the MIT license. No ads, no account.</p>
+    <figure class="shot">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="/assets/overview-dark-640.webp 640w, /assets/overview-dark.webp 1280w" sizes="(min-width: 75rem) 1072px, 100vw" type="image/webp">
+        <img src="/assets/overview-light.webp" srcset="/assets/overview-light-640.webp 640w, /assets/overview-light.webp 1280w" sizes="(min-width: 75rem) 1072px, 100vw" width="1280" height="860" alt="Resource Viewer overview: live CPU and memory chart, one graph per CPU thread, memory breakdown and disk usage" fetchpriority="high">
+      </picture>
+    </figure>
+  </section>
+
+  <section class="section container" id="cleanup" aria-labelledby="cleanup-title">
+    <div class="head">
+      <h2 id="cleanup-title">Every item tells you what you give up.</h2>
+      <p>Each cache comes with what you gain and what you might lose.</p>
+    </div>
+    <div class="split">
+      <figure class="shot">
+        <img src="/assets/cleanup.webp" srcset="/assets/cleanup-640.webp 640w, /assets/cleanup.webp 1280w" sizes="(min-width: 75rem) 640px, 100vw" width="1280" height="860" loading="lazy" decoding="async" alt="Cleanup screen: 1.7 GB can be freed, caches grouped by category with Safe and Minor side effects labels">
+      </figure>
+      <ul class="risks" aria-label="Risk levels">
+        <li class="r-safe"><h3 class="tag">Safe</h3><p class="meaning">Rebuilt automatically. You won’t notice.</p><span class="def">Selected for you</span></li>
+        <li class="r-minor"><h3 class="tag">Minor side effects</h3><p class="meaning">Downloads again, or opens slower once.</p><span class="def">Your choice</span></li>
+        <li class="r-think"><h3 class="tag">Think first</h3><p class="meaning">Gone for good, or costly to get back.</p><span class="def">Your choice</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section container monitor" id="monitor" aria-labelledby="monitor-title">
+    <div class="head center">
+      <h2 id="monitor-title">Find the app eating your memory.</h2>
+      <p>Live CPU and memory per app. A browser counts once.</p>
+    </div>
+    <figure class="shot">
+      <img src="/assets/processes.webp" srcset="/assets/processes-640.webp 640w, /assets/processes.webp 1280w" sizes="(min-width: 75rem) 1072px, 100vw" width="1280" height="600" loading="lazy" decoding="async" alt="Processes screen: live CPU and memory graphs for the four heaviest apps and a memory by app chart">
+    </figure>
+    <ul class="facts">
+      <li><h3>60 seconds, live</h3><p>CPU and memory, redrawn every second.</p></li>
+      <li><h3>Every thread</h3><p>One small graph per CPU thread.</p></li>
+      <li><h3>Real memory</h3><p>File cache shown apart from app memory.</p></li>
+      <li><h3>End frozen apps</h3><p>Closes politely first, forces only on confirm.</p></li>
+    </ul>
+  </section>
+
+  <section class="band" id="safety" aria-labelledby="safety-title">
+    <div class="container">
+      <div class="head">
+        <h2 id="safety-title">Nothing outside the allow-list is touched.</h2>
+        <p>The window only sends item names. File paths never leave the app’s core.</p>
+      </div>
+      <ol class="rules">
+        <li><div>Only the contents of known cache folders.<span>Never the folder, never outside it.</span></div></li>
+        <li><div>Links are removed, never followed.<span>A shortcut to your photos stays a shortcut.</span></div></li>
+        <li><div>Running tools keep working.<span>Sockets and pipes are skipped.</span></div></li>
+        <li><div>Temp files must be yours and a day old.</div></li>
+        <li><div>Locked files are skipped, not forced.<span>And counted, so you know why.</span></div></li>
+        <li><div>Passwords, cookies and history stay.<span>Browser cleanup removes the cache only.</span></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section container" id="what" aria-labelledby="what-title">
+    <div class="head">
+      <h2 id="what-title">What it can clean</h2>
+    </div>
+    <table class="table">
+      <thead><tr><th scope="col">Category</th><th scope="col">Items</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Browsers</th><td>Chrome, Edge, Brave, Firefox, Opera and Vivaldi cache</td></tr>
+        <tr><th scope="row">Apps</th><td>VS Code, Discord, Slack, Teams and Spotify caches</td></tr>
+        <tr><th scope="row">Developer tools</th><td>npm, pnpm, Yarn, pip, Go, Gradle and Xcode DerivedData</td></tr>
+        <tr><th scope="row">System</th><td>Thumbnails, crash reports and app logs</td></tr>
+        <tr><th scope="row">Temp and Trash</th><td>Old temp files and the Recycle Bin or Trash</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section container download" id="download" aria-labelledby="download-title">
+    <div class="head center">
+      <h2 id="download-title">Download Resource Viewer</h2>
+      <p>Version 0.1.0, free for every platform.</p>
+    </div>
+    <div class="card">
+      <table class="table">
+        <thead><tr><th scope="col">Platform</th><th scope="col">File</th><th scope="col"><span class="visually-hidden">Link</span></th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Windows 10 and 11</th><td>Installer, <code>ResourceViewer-Setup.exe</code></td><td><a href="https://github.com/thealihamza04/Resource-viewer/releases/latest">Download</a></td></tr>
+          <tr><th scope="row">Windows, no install</th><td>Portable, <code>ResourceViewer-Portable.exe</code></td><td><a href="https://github.com/thealihamza04/Resource-viewer/releases/latest">Download</a></td></tr>
+          <tr><th scope="row">Ubuntu and Debian</th><td><code>resource-viewer_amd64.deb</code></td><td><a href="https://github.com/thealihamza04/Resource-viewer/releases/latest">Download</a></td></tr>
+          <tr><th scope="row">Other Linux</th><td><code>ResourceViewer.AppImage</code></td><td><a href="https://github.com/thealihamza04/Resource-viewer/releases/latest">Download</a></td></tr>
+          <tr><th scope="row">macOS</th><td>Build on a Mac with <code>npm run dist:mac</code></td><td><a href="https://github.com/thealihamza04/Resource-viewer#building-for-macos">How to</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Not code-signed yet. If Windows warns you, choose More info, then Run anyway.</p>
+  </section>
+
+  <section class="section container" id="faq" aria-labelledby="faq-title">
+    <div class="head">
+      <h2 id="faq-title">Questions</h2>
+    </div>
+    <div class="faq">
+      <details><summary>Is Resource Viewer free?</summary><p>Yes. It is free and open source under the MIT license, with no ads, accounts or upgrades.</p></details>
+      <details><summary>Will cleaning delete my passwords or history?</summary><p>No. Browser cleanup only removes the cache. Cookies, saved passwords, history and bookmarks are never touched.</p></details>
+      <details><summary>Should I clear my RAM cache?</summary><p>No. File cache is spare memory that makes files open faster, and your system hands it to apps the moment they need it.</p></details>
+    </div>
+  </section>
+
+  <section class="final container" aria-labelledby="final-title">
+    <img class="icon" src="/assets/icon-192.png" alt="" width="96" height="96" loading="lazy">
+    <h2 id="final-title" class="final-title">See what you gain. Then clean.</h2>
+    <div class="actions">
+      <a class="btn" href="#download">Download free</a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="container">
+    <p>© 2026 Ali Hamza. Released under the MIT license.</p>
+    <ul>
+      <li><a href="https://github.com/thealihamza04/Resource-viewer">GitHub</a></li>
+      <li><a href="https://github.com/thealihamza04/Resource-viewer/issues">Report an issue</a></li>
+      <li><a href="https://github.com/thealihamza04/Resource-viewer/blob/main/LICENSE">License</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+  // Name the visitor's platform on the main download button. Without scripting it reads "Download free".
+  (function () {
+    var ua = navigator.userAgent, label = document.getElementById('dl-label');
+    if (/Windows/i.test(ua)) label.textContent = 'Download for Windows';
+    else if (/Linux|X11/i.test(ua) && !/Android/i.test(ua)) label.textContent = 'Download for Linux';
+  })();
+</script>
+</body>
+</html>
