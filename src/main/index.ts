@@ -1,7 +1,8 @@
-import { app, BrowserWindow, ipcMain, nativeTheme, shell } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain, nativeTheme, shell } from 'electron'
 import path from 'node:path'
 import { targetFolder } from './cleaner'
 import { runJob } from './jobs'
+import { cancelMap, diskRoot, homeRoot, mapFolder, revealable } from './storage'
 import icon from '../../resources/icon.png?asset'
 import { getDisks, getProcesses, getSnapshot, getStatic, killProcess } from './metrics'
 
@@ -63,6 +64,20 @@ function registerIpc() {
   ipcMain.handle('clean:run', (e, ids: unknown) => {
     const list = Array.isArray(ids) ? ids.filter((x): x is string => typeof x === 'string') : []
     return runJob({ kind: 'clean', ids: list }, (p) => e.sender.send('clean:progress', p))
+  })
+  ipcMain.handle('storage:scan', async (e, scope: unknown) => {
+    let root = scope === 'disk' ? diskRoot() : homeRoot()
+    if (scope === 'pick') {
+      const pick = await dialog.showOpenDialog(sender(e)!, { properties: ['openDirectory'], defaultPath: homeRoot() })
+      if (pick.canceled || !pick.filePaths[0]) return null
+      root = pick.filePaths[0]
+    }
+    return mapFolder(root, (p) => e.sender.send('storage:progress', p))
+  })
+  ipcMain.handle('storage:cancel', () => cancelMap())
+  ipcMain.handle('storage:reveal', (_e, p: unknown) => {
+    const full = typeof p === 'string' ? revealable(p) : null
+    if (full) shell.showItemInFolder(full)
   })
   ipcMain.handle('clean:open', async (_e, id: unknown) => {
     const dir = typeof id === 'string' ? targetFolder(id) : undefined

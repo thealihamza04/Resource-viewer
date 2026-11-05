@@ -3,7 +3,7 @@ import { Copy, Minus, Square, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const btn =
-  'text-muted-foreground hover:text-foreground hover:bg-accent focus-visible:ring-ring/50 grid h-8 w-10 place-items-center rounded-md transition-colors outline-none focus-visible:ring-2 [&_svg]:size-4'
+  'text-muted-foreground hover:text-foreground hover:bg-accent focus-visible:ring-ring/50 grid h-7 w-8 place-items-center rounded-md transition-colors outline-none focus-visible:ring-2 [&_svg]:size-3.5'
 
 /** Minimize / maximize / close for the frameless window (Windows & Linux). */
 export function WindowControls() {
@@ -29,7 +29,7 @@ export function WindowControls() {
         aria-label={maximized ? 'Restore' : 'Maximize'}
         title={maximized ? 'Restore' : 'Maximize'}
       >
-        {maximized ? <Copy className="-scale-x-100" /> : <Square className="!size-3.5" />}
+        {maximized ? <Copy className="-scale-x-100" /> : <Square className="!size-3" />}
       </button>
       <button
         type="button"

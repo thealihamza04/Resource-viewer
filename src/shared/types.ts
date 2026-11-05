@@ -114,4 +114,43 @@ export interface Api {
   clean(ids: string[]): Promise<CleanResult[]>
   openTarget(id: string): Promise<void>
   onScanProgress(cb: (p: ScanProgress) => void): () => void
+  storage: {
+    /** Resolves null when the folder picker is cancelled. */
+    scan(scope: StorageScope): Promise<StorageResult | null>
+    cancel(): Promise<void>
+    /** Shows a path from the last scan in the file manager. */
+    reveal(path: string): Promise<void>
+    onProgress(cb: (p: StorageProgress) => void): () => void
+  }
+}
+
+/** One entry in the storage map. Short keys keep large trees cheap to send over IPC. */
+export interface DiskNode {
+  /** Name (not the full path). */
+  n: string
+  /** Bytes on disk. */
+  s: number
+  /** 'd' folder, 'f' file, 'r' many small items merged into one slice. */
+  k: 'd' | 'f' | 'r'
+  c?: DiskNode[]
+  /** For 'r' nodes: how many items were merged. */
+  m?: number
+}
+
+export type StorageScope = 'home' | 'disk' | 'pick'
+
+export interface StorageResult {
+  root: string
+  sep: string
+  tree: DiskNode
+  files: number
+  folders: number
+  unreadable: number
+  ms: number
+}
+
+export interface StorageProgress {
+  files: number
+  bytes: number
+  current: string
 }

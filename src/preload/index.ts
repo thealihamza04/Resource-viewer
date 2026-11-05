@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron'
-import type { Api, ScanProgress } from '../shared/types'
+import type { Api, ScanProgress, StorageProgress } from '../shared/types'
 
 const api: Api = {
   win: {
@@ -26,6 +26,16 @@ const api: Api = {
     const listener = (_e: Electron.IpcRendererEvent, p: ScanProgress) => cb(p)
     ipcRenderer.on('clean:progress', listener)
     return () => ipcRenderer.removeListener('clean:progress', listener)
+  },
+  storage: {
+    scan: (scope) => ipcRenderer.invoke('storage:scan', scope),
+    cancel: () => ipcRenderer.invoke('storage:cancel'),
+    reveal: (p) => ipcRenderer.invoke('storage:reveal', p),
+    onProgress: (cb) => {
+      const listener = (_e: Electron.IpcRendererEvent, p: StorageProgress) => cb(p)
+      ipcRenderer.on('storage:progress', listener)
+      return () => ipcRenderer.removeListener('storage:progress', listener)
+    }
   }
 }
 
