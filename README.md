@@ -24,6 +24,7 @@ pre-selects what is genuinely safe.
 
 - **Honest cleanup.** Each item explains *what it is*, *what you gain* and *what you might lose*, with a clear risk level.
 - **Live system view.** CPU, memory, per-thread load, disks and running apps, updated in real time.
+- **Storage map.** A zoomable sunburst of any folder or the whole disk, to find what fills your drive.
 - **Safe by design.** Strict allow-list, no symlink following, in-use files skipped, nothing touched without confirmation.
 - **Native feel.** A minimal interface that follows your system's light or dark appearance.
 
@@ -73,6 +74,16 @@ The full catalogue for each platform lives in [`src/main/targets.ts`](src/main/t
 
 </details>
 
+### Storage
+
+<img src="docs/screenshots/storage.png" width="860" alt="Storage map: a sunburst of the /usr folder" />
+
+- A sunburst map of your home folder, the whole disk or any folder you choose: each ring is one level deeper
+- Click a ring to zoom into that folder, click the centre to go back up; zooming is animated at 60 fps
+- The side panel lists the biggest items with their size and share; open any of them in your file manager
+- Read-only: it never changes or deletes anything. It does not follow symbolic links or cross into other drives, and hard-linked files are counted once
+- Items under 1 MB are grouped into one "smaller items" slice per folder, so even a million files stay fast to draw
+
 ### Processes
 
 <img src="docs/screenshots/processes.png" width="860" alt="Processes" />
@@ -85,17 +96,21 @@ The full catalogue for each platform lives in [`src/main/targets.ts`](src/main/t
 
 Download the file for your platform from the [latest release](https://github.com/thealihamza04/Resource-viewer/releases/latest).
 
-| Platform | File | Install |
-|---|---|---|
-| **Windows 10 / 11** | `ResourceViewer-Setup.exe` | Run the installer. Adds Start-menu and desktop shortcuts; uninstall from **Settings → Apps**. |
-| | `ResourceViewer-Portable.exe` | No installation — double-click to run. |
-| **Ubuntu / Debian** | `resource-viewer_amd64.deb` | `sudo apt install ./resource-viewer_amd64.deb`, then open **Resource Viewer** from the app menu. |
-| **Other Linux** | `ResourceViewer.AppImage` | `chmod +x ResourceViewer.AppImage` and run it. |
-| **macOS** | `Resource Viewer-<version>.dmg` | Open the disk image and drag the app to **Applications**. Must be built on a Mac — see below. |
+| Platform | File | Size | Install |
+|---|---|---|---|
+| **Windows 10 / 11** | `ResourceViewer-Setup.exe` | 113 MB | Run the installer. Adds Start-menu and desktop shortcuts; uninstall from **Settings → Apps**. |
+| | `ResourceViewer-Portable.exe` | 103 MB | No installation — double-click to run. |
+| **Ubuntu / Debian** | `resource-viewer_amd64.deb` | 100 MB | `sudo apt install ./resource-viewer_amd64.deb`, then open **Resource Viewer** from the app menu. |
+| **Other Linux** | `ResourceViewer.AppImage` | 99 MB | `chmod +x ResourceViewer.AppImage` and run it. |
+| **macOS** | `Resource Viewer-<version>.dmg` | | Open the disk image and drag the app to **Applications**. Must be built on a Mac — see below. |
 
 > [!NOTE]
 > The app is not code-signed yet. On first launch Windows shows **"Windows protected your PC"** —
 > choose **More info → Run anyway**. On macOS, right-click the app and choose **Open**.
+
+**Why about 100 MB?** Resource Viewer's own code is under 3 MB. The rest is Electron's
+Chromium engine, which every Electron app ships (VS Code, Discord and Slack too). Builds
+include only the English locale and use maximum compression to keep downloads small.
 
 ## Safety
 
@@ -156,11 +171,14 @@ src/
 │   ├── targets.ts        Cleanup catalogue per platform, with gain / loss / risk text
 │   ├── cleaner.ts        Scanner and cleaner with the safety rules above
 │   ├── cleanWorker.ts    Runs scans and cleans on a worker thread
-│   └── jobs.ts           One job at a time; concurrent scans share a result
+│   ├── jobs.ts           One job at a time; concurrent scans share a result
+│   ├── diskmap.ts        Read-only folder walker for the storage map
+│   ├── storageWorker.ts  Runs the storage map scan on a worker thread
+│   └── storage.ts        Starts / stops map scans, reveals items in the file manager
 ├── preload/              Typed, context-isolated bridge (window.api)
 ├── shared/               Types shared by every process
 └── renderer/             React interface
-    ├── features/         Overview, Cleanup, Processes
+    ├── features/         Overview, Cleanup, Storage (canvas sunburst), Processes
     └── components/       LiveChart (D3 on canvas), window controls, shadcn/ui
 ```
 
@@ -168,7 +186,13 @@ src/
 thread — about 3 seconds for 400,000 files, versus roughly a minute with one
 asynchronous call per file — so the interface never blocks. Live charts are drawn with
 D3 onto a `<canvas>` on each animation frame, without re-rendering React, and pause when
-the window is hidden.
+the window is hidden. The storage sunburst is laid out with `d3-hierarchy` and also drawn
+on a canvas, so zooming through tens of thousands of folders stays at 60 fps.
+
+**Resource use.** With the window open the app uses about 160 MB of memory and around 3% of
+one CPU core, and close to 0% when minimised. Chart history is capped at the last minute
+and the process list is replaced on every poll rather than kept, so memory does not grow
+when the app is left running for hours.
 
 **Security.** The renderer runs sandboxed with context isolation and no Node.js access,
 under a strict Content Security Policy.
@@ -179,7 +203,7 @@ under a strict Content Security Policy.
 |---|---|
 | Shell | Electron 45, electron-vite, electron-builder |
 | Interface | React 19, TypeScript, Tailwind CSS 4, shadcn/ui |
-| Charts | D3 (live canvas charts), Recharts via shadcn/ui charts |
+| Charts | D3 (live canvas charts, `d3-hierarchy` storage sunburst), Recharts via shadcn/ui charts |
 | System data | systeminformation |
 
 ## App icon
